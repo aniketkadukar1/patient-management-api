@@ -1,9 +1,9 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from .models import Patient, FamilyMember, Medication
-from .serializers import PatientSerializer, FamilyMemberSerializer, MedicationSerializer
+from .serializers import PatientSerializer, FamilyMemberSerializer, MedicationSerializer, Patient360Serializer
 
 
 class PatientListCreateAPIView(ListCreateAPIView):
@@ -75,3 +75,59 @@ class MedicationToggleActiveAPIView(APIView):
             )
         except Medication.DoesNotExist:
             return Response({"error": "Medication not found."}, status=status.HTTP_404_NOT_FOUND)
+    
+
+class Patient360APIView(RetrieveAPIView):
+    queryset = Patient.objects.all()
+    serializer_class = Patient360Serializer
+
+    def retrieve(self, request, *args, **kwargs):
+        try:
+            patient = self.get_object()
+            serializer = self.get_serializer(patient)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Patient.DoesNotExist:
+            return Response({"error": "Patient not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class UpdatePatient360APIView(APIView):
+    def put(self, request, patient_id):
+        try:
+            # Retrieve the patient
+            patient = Patient.objects.get(id=patient_id)
+        except Patient.DoesNotExist:
+            return Response({"error": "Patient not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        data = request.data
+
+        # Update patient demographics if provided
+        if 'patient' in data:
+            patient_serializer = Patient360Serializer(patient, data=data['patient'], partial=True)
+            if patient_serializer.is_valid():
+                patient_serializer.save()
+            else:
+                return Response(patient_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # Update family members if provided
+        if 'family_members' in data:
+            for family_member_data in data['family_members']:
+                family_member_id = family_member_data.pop('id', None)
+                if family_member_id:
+                    try:
+                        family_member = FamilyMember.objects.get(id=family_member_id, patient=patient)
+                        family_member_serializer = FamilyMemberSerializer(
+                            family_member, data=family_member_data, partial=True
+                        )
+                        if family_member_serializer.is_valid():
+                            family_member_serializer.save()
+                        else:
+                            return Response(family_member_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                    except FamilyMember.DoesNotExist:
+                        return Response(
+                            {"error": f"Family member with ID {family_member_id} not found."},
+                            status=status.HTTP_404_NOT_FOUND,
+                        )
+                else:
+                    return Response({"error": "Family member ID is required for updates."}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"message": "Patient 360 updated successfully."}, status=status.HTTP_200_OK)
