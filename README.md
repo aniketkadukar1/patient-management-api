@@ -1,10 +1,10 @@
-### Patient Management System APIS
+### Patient Management APIS
 
 ---
 
 #### **Overview**
 
-This project is a **Patient Management System** developed using **Django** and **Django REST Framework (DRF)**. It serves as an assessment to evaluate the proficiency in designing Django models, creating REST APIs, and implementing backend logic. The project is built to manage patient records, family member details, and prescribed medications efficiently.
+This project is a **Patient Management API** developed using **Django** and **Django REST Framework (DRF)**. It serves as an assessment to evaluate the proficiency in designing Django models, creating REST APIs, and implementing backend logic. The project is built to manage patient records, family member details, and prescribed medications efficiently.
 
 ---
 
@@ -47,13 +47,13 @@ Follow these steps to set up the project locally:
 1. **Clone the Repository**
    ```bash
    git clone <repository_url>
-   cd patient-management-system
+   cd patient-management-api
    ```
 
 2. **Create a Virtual Environment**
    ```bash
-   python -m venv env
-   source env/bin/activate   # For Windows: env\Scripts\activate
+   python -m venv venv
+   source venv/bin/activate   # For Windows: venv\Scripts\activate
    ```
 
 3. **Install Dependencies**
@@ -134,10 +134,3 @@ Follow these steps to set up the project locally:
 - Create a frontend for ease of use.
 
 ---
-
-### **Feedback**
-If you have any feedback or suggestions, please reach out via the repository issue tracker or email us at [support@example.com](mailto:support@example.com).
-
----
-
-Enjoy exploring the **Patient Management System**!
