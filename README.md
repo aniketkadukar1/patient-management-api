@@ -4,7 +4,7 @@
 
 #### **Overview**
 
-This project is a **Patient Management API** developed using **Django** and **Django REST Framework (DRF)**. It serves as an assessment to evaluate the proficiency in designing Django models, creating REST APIs, and implementing backend logic. The project is built to manage patient records, family member details, and prescribed medications efficiently.
+This project is a **Patient Management API** developed using **Django** and **Django REST Framework (DRF)**.
 
 ---
 
