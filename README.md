@@ -76,6 +76,7 @@ Follow these steps to set up the project locally:
 
 6. **Access the API**
    - Visit `http://127.0.0.1:8000/` for API endpoints.
+   - Visit `http://localhost:8000/api/docs/` for swagger docs.
 
 ---
 
