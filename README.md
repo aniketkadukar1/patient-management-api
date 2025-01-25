@@ -16,6 +16,8 @@ This project is a **Patient Management API** developed using **Django** and **Dj
      - Name
      - Date of Birth
      - Gender
+     - Mobile number
+     - Medical History
 
 2. **Family Member Management**
    - Associate family members with patients and define relationships.
@@ -25,7 +27,7 @@ This project is a **Patient Management API** developed using **Django** and **Dj
    - Add, view, and manage active medications for patients.
    - Update dosage, timing, or activate/deactivate medications.
 
-4. **Patient 360**
+4. **Patient Overall Information**
    - Retrieve complete details of a patient, including:
      - Demographics
      - Family members
@@ -98,32 +100,9 @@ Follow these steps to set up the project locally:
 - `PUT /patients/<patient_id>/medications/<id>/` - Update medication details (dosage, timings, etc.).
 - `PATCH /patients/<patient_id>/medications/<id>/activate/` - Activate or deactivate a medication.
 
-#### **Patient 360**
+#### **Patient's Overall Data**
 - `GET /patients/<patient_id>/360/` - Retrieve patient demographics and family details.
 - `PUT /patients/<patient_id>/360/update/` - Update patient demographics or family details.
-
----
-
-### **Bonus Features**
-1. **Code Quality**
-   - Follows **SOLID principles** for better maintainability.
-   - Modularized structure for scalability.
-   
-2. **Filtering in APIs**
-   - Add filters to APIs (e.g., filter patients by gender, medications by active status).
-
-3. **Database Optimization**
-   - Efficient query handling using `select_related` and `prefetch_related`.
-
-4. **Nested Serializers**
-   - Proper use of nested serializers for related objects.
-
----
-
-### **Assumptions**
-- Emergency contacts are managed as part of the family members.
-- Basic validations are applied to all models and serializers.
-- SQLite is used as the default database but can be switched to PostgreSQL.
 
 ---
 
