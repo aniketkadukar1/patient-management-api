@@ -1,4 +1,4 @@
-### Patient Management APIS
+### Patient Management API'S
 
 ---
 
