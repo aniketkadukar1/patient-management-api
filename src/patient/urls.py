@@ -3,6 +3,10 @@ from .views import PatientListCreateAPIView, PatientRetrieveAPIView, FamilyMembe
 from .views import MedicationListCreateAPIView, MedicationRetrieveUpdateAPIView, MedicationToggleActiveAPIView
 from .views import Patient360APIView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 app_name = 'patient'
 
@@ -23,4 +27,8 @@ urlpatterns = [
     # Swagger UI
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path("docs/", SpectacularSwaggerView.as_view(template_name="swagger-ui.html", url_name="patient:schema"),name="swagger-ui"),
+
+    # JWT auth
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),  # Login and get token
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),  # Refresh token
 ]
