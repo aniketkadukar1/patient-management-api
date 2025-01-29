@@ -1,6 +1,6 @@
 from rest_framework import serializers, routers
 from .models import Medication, Patient, FamilyMember
-
+from django.contrib.auth.models import User
 
 class PatientSerializer(serializers.ModelSerializer):
     class Meta:
@@ -35,3 +35,17 @@ class Patient360Serializer(serializers.ModelSerializer):
         return FamilyMemberSerializer(family_members, many=True).data
 
 
+class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, min_length=6)
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'password']
+
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data.get('email', ''),
+            password=validated_data['password']
+        )
+        return user

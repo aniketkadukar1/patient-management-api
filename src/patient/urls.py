@@ -2,6 +2,7 @@ from django.urls import path
 from .views import PatientListCreateAPIView, PatientRetrieveAPIView, FamilyMemberListCreateAPIView, FamilyMemberRetrieveUpdateAPIView, UpdatePatient360APIView
 from .views import MedicationListCreateAPIView, MedicationRetrieveUpdateAPIView, MedicationToggleActiveAPIView
 from .views import Patient360APIView
+from .views import RegisterUserView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -31,4 +32,8 @@ urlpatterns = [
     # JWT auth
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),  # Login and get token
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),  # Refresh token
+
+    # Signup
+    path('signup/', RegisterUserView.as_view(), name='signup'),
+
 ]

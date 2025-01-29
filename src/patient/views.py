@@ -1,22 +1,47 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, RetrieveAPIView
+from rest_framework.generics import (ListCreateAPIView, 
+                                     RetrieveUpdateAPIView, 
+                                     RetrieveAPIView,
+                                     CreateAPIView)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from .models import Patient, FamilyMember, Medication
-from .serializers import PatientSerializer, FamilyMemberSerializer, MedicationSerializer, Patient360Serializer
+from .serializers import (PatientSerializer, 
+                          FamilyMemberSerializer, 
+                          MedicationSerializer, 
+                          Patient360Serializer,
+                          UserSerializer,
+                        )
+from django.contrib.auth.models import User
+from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
+
+
+class RegisterUserView(APIView):
+    permission_classes = [AllowAny]  # Allow public access
+
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "User created successfully!"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PatientListCreateAPIView(ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Patient.objects.all()
     serializer_class = PatientSerializer
 
 
 class PatientRetrieveAPIView(RetrieveUpdateAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Patient.objects.all()
     serializer_class = PatientSerializer
 
 
 class FamilyMemberListCreateAPIView(ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = FamilyMemberSerializer
 
     def get_queryset(self):
@@ -29,6 +54,7 @@ class FamilyMemberListCreateAPIView(ListCreateAPIView):
         serializer.save(patient=patient)
 
 class FamilyMemberRetrieveUpdateAPIView(RetrieveUpdateAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = FamilyMemberSerializer
 
     def get_queryset(self):
@@ -38,6 +64,7 @@ class FamilyMemberRetrieveUpdateAPIView(RetrieveUpdateAPIView):
 
 # i. Add an Active Medication & ii. List All Active Medications
 class MedicationListCreateAPIView(ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = MedicationSerializer
 
     def get_queryset(self):
@@ -55,6 +82,7 @@ class MedicationListCreateAPIView(ListCreateAPIView):
 
 # iii. Retrieve a Given Medication & v. Update Medication Details
 class MedicationRetrieveUpdateAPIView(RetrieveUpdateAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = MedicationSerializer
 
     def get_queryset(self):
@@ -64,6 +92,7 @@ class MedicationRetrieveUpdateAPIView(RetrieveUpdateAPIView):
 
 # iv. Activate or Deactivate Medications
 class MedicationToggleActiveAPIView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request, patient_id, pk):
         try:
             medication = Medication.objects.get(patient_id=patient_id, id=pk)
@@ -78,6 +107,7 @@ class MedicationToggleActiveAPIView(APIView):
     
 
 class Patient360APIView(RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Patient.objects.all()
     serializer_class = Patient360Serializer
 
@@ -91,6 +121,7 @@ class Patient360APIView(RetrieveAPIView):
 
 
 class UpdatePatient360APIView(APIView):
+    permission_classes = [IsAuthenticated]
     def put(self, request, patient_id):
         try:
             # Retrieve the patient
